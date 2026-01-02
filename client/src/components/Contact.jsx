@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 const Contact = ({ onOpenProBono }) => {
@@ -21,7 +21,6 @@ const Contact = ({ onOpenProBono }) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    setSuccess(false);
 
     try {
       const res = await fetch(
@@ -33,7 +32,7 @@ const Contact = ({ onOpenProBono }) => {
         }
       );
 
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) throw new Error("Failed");
 
       setSuccess(true);
       setFormData({
@@ -68,77 +67,86 @@ const Contact = ({ onOpenProBono }) => {
             our systems.
           </p>
 
-          <form
-            onSubmit={handleSubmit}
-            className="max-w-md mx-auto space-y-4 text-left font-sans"
-          >
-            <div>
-              <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full bg-neutral-950 border border-neutral-800 text-white p-3 focus:outline-none focus:border-white transition-colors"
-                placeholder="Founder Name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full bg-neutral-950 border border-neutral-800 text-white p-3 focus:outline-none focus:border-white transition-colors"
-                placeholder="founder@company.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
-                Current Stage
-              </label>
-              <select
-                name="stage"
-                value={formData.stage}
-                onChange={handleChange}
-                className="w-full bg-neutral-950 border border-neutral-800 text-neutral-400 p-3 focus:outline-none focus:border-white transition-colors"
-              >
-                <option>Idea / Pre-Revenue</option>
-                <option>Early Traction ($1k - $10k MRR)</option>
-                <option>Scaling ($10k+ MRR)</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-white text-neutral-950 font-bold py-4 mt-4 hover:bg-neutral-200 transition-colors flex items-center justify-center space-x-2"
+          {/* 👇 FORM OR SUCCESS MESSAGE */}
+          {!success ? (
+            <form
+              onSubmit={handleSubmit}
+              className="max-w-md mx-auto space-y-4 text-left font-sans"
             >
-              <span>{loading ? "Submitting..." : "Request Discovery Call"}</span>
-              <ChevronRight size={16} />
-            </button>
+              <div>
+                <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-neutral-950 border border-neutral-800 text-white p-3 focus:outline-none focus:border-white transition-colors"
+                  placeholder="Founder Name"
+                />
+              </div>
 
-            {success && (
-              <p className="text-green-500 text-sm text-center mt-4">
-                Request submitted successfully.
-              </p>
-            )}
+              <div>
+                <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-neutral-950 border border-neutral-800 text-white p-3 focus:outline-none focus:border-white transition-colors"
+                  placeholder="founder@company.com"
+                />
+              </div>
 
-            {error && (
-              <p className="text-red-500 text-sm text-center mt-4">
-                Something went wrong. Please try again.
+              <div>
+                <label className="block text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
+                  Current Stage
+                </label>
+                <select
+                  name="stage"
+                  value={formData.stage}
+                  onChange={handleChange}
+                  className="w-full bg-neutral-950 border border-neutral-800 text-neutral-400 p-3 focus:outline-none focus:border-white transition-colors"
+                >
+                  <option>Idea / Pre-Revenue</option>
+                  <option>Early Traction ($1k - $10k MRR)</option>
+                  <option>Scaling ($10k+ MRR)</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-white text-neutral-950 font-bold py-4 mt-4 hover:bg-neutral-200 transition-colors flex items-center justify-center space-x-2"
+              >
+                <span>{loading ? "Submitting..." : "Request Discovery Call"}</span>
+                <ChevronRight size={16} />
+              </button>
+
+              {error && (
+                <p className="text-red-500 text-sm text-center mt-4">
+                  Something went wrong. Please try again.
+                </p>
+              )}
+            </form>
+          ) : (
+            <div className="max-w-md mx-auto py-12 text-center">
+              <h3 className="text-2xl text-white font-bold mb-4 font-serif">
+                Request Submitted Successfully 🎉
+              </h3>
+              <p className="text-neutral-400 font-light mb-6">
+                We’ve received your details and will get back to you shortly.
               </p>
-            )}
-          </form>
+              <p className="text-sm text-neutral-600">
+                You can safely close this page.
+              </p>
+            </div>
+          )}
 
           <p className="mt-6 text-neutral-600 text-sm font-sans">
             Prefer email?{" "}
